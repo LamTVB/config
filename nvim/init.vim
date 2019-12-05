@@ -49,6 +49,10 @@ set cmdheight=1
 " or 'The only match'
 set shortmess+=c
 
+com DisableNumber set nonumber norelativenumber
+
+com EnableNumber set number relativenumber
+
 compiler fish
 
 " ============================================================================ "
