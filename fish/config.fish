@@ -14,6 +14,20 @@ for directory in $PROJECT_PATH/*
   end
 end
 
+function link-lib
+  if test (count $argv) -gt 0
+    set libName $argv[1]
+    if test -e "$PROJECT_PATH/$libName"
+      rm -rf "node_modules/@unito-private/$libName"
+      ln -s "$PROJECT_PATH/$libName" "node_modules/@unito-private/$libName"
+    else
+      echo "The project $libaName must be pulled before creating a link with it"
+    end
+  else
+    echo "Need the library to link"
+  end
+end
+
 function robo3t
   if test (count $argv) -gt 0
     env QT_SCALE_FACTOR=$argv[1] ~/Documents/robo3t/bin/./robo3t
@@ -63,6 +77,7 @@ alias internal-tools 'cd $PROJECT_PATH/internal-tools'
 alias link-local-libs '$PROJECT_PATH/internal-tools/dev/./local_libs.sh'
 alias bump-connectors '$PROJECT_PATH/internal-tools/dev/./bump-connectors'
 alias daily-async-scrum "nvim /home/lam/Documents/unito/daily-async-scrum/daily-async-scrum(date '+%y%m')"
+alias generate-aws-token '$PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt'
 
 # APP ALIAS
 # alias robo3t '~/Documents/robo3t/bin/./robo3t'
@@ -123,3 +138,11 @@ alias gup "git pull --rebase"
 alias gco "git checkout"
 alias gcm "git checkout master"
 alias glo 'git log --pretty=format:"%C(bold Yellow)Subject: %s%n%C(bold Yellow)Commit: %H%n%C(red)Author: %an <%ae> %n%C(red)Author Date: %ad%n%Creset%b%n%N"'
+
+set file (cat ~/.aws/credentials)
+set extracted (string match -r "\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z)" "$file")[1]
+set dateCredentials (date -d $extracted +%s)
+set dateNow (date +%s)
+if test $dateCredentials -lt $dateNow
+  exec $PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt
+end
