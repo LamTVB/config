@@ -8,8 +8,12 @@ for file in $PROJECT_PATH/bin/*
     alias "update-$fileName" "nvim $file"
   end
 end
+
 for directory in $PROJECT_PATH/*
   if test -d $directory
+    if test (basename $directory) = 'console'
+      alias "maestro" "cd $directory/maestro"
+    end
     alias (basename $directory) "cd $directory"
   end
 end
@@ -91,9 +95,11 @@ alias uinitvim 'nvim ~/.config/nvim/init.vim'
 alias fishrc 'source ~/.config/fish/config.fish'
 alias show-used-ports='sudo lsof -i -P -n | grep LISTEN'
 alias redis-server '~/./redis-stable/src/redis-server'
+alias cconfig 'cd ~/.config/'
 
 # SYSTEM ALIAS
 alias l "ls -l"
+alias nilo "sudo"
 
 # GIT ALIAS
 alias g git
@@ -143,6 +149,12 @@ set file (cat ~/.aws/credentials)
 set extracted (string match -r "\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z)" "$file")[1]
 set dateCredentials (date -d $extracted +%s)
 set dateNow (date +%s)
+
 if test $dateCredentials -lt $dateNow
-  exec $PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt
+  read -l -P 'Do you have your phone? [y/N] ' response
+  if string match -q -r '^([yY][eE][sS]|[yY])+$' "$response"
+    exec $PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt
+  else
+    echo "You'll have to regenerate later"
+  end
 end
