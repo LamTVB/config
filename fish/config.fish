@@ -9,6 +9,13 @@ for file in $PROJECT_PATH/bin/*
   end
 end
 
+for file in /home/lam/Documents/bin/*
+  if test -x $file
+    set fileName (basename $file)
+    alias $fileName "/.$file"
+  end
+end
+
 for directory in $PROJECT_PATH/*
   if test -d $directory
     if test (basename $directory) = 'console'
@@ -16,6 +23,12 @@ for directory in $PROJECT_PATH/*
     end
     alias (basename $directory) "cd $directory"
   end
+end
+
+function gpr
+  set projectName (git remote get-url origin | sed s/git@github.com:// | sed s/\\.git//)
+  set branchName (git rev-parse --abbrev-ref HEAD)
+  google-chrome "https://github.com/$projectName/compare/master...$branchName?expand=1&w=1"
 end
 
 function link-lib

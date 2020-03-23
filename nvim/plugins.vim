@@ -19,7 +19,6 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'mhinz/vim-startify'
 Plug 'Lenovsky/nuake'
 Plug 'JamshedVesuna/vim-markdown-preview'
-Plug 'benmills/vimux'
 Plug 'Quramy/tsuquyomi'
 Plug 'chase/focuspoint-vim'
 " === Editing Plugins === "
