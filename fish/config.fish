@@ -1,5 +1,5 @@
 set -g -x PROJECT_PATH /home/lam/Documents/unito
-set -g -x UNITO_GEMFURY_TOKEN rrxW4pZqrmLdW2yXES5b
+set -g -x UNITO_GITHUB_PKG_TOKEN
 
 for file in $PROJECT_PATH/bin/*
   if test -x $file
@@ -43,6 +43,15 @@ function link-lib
   else
     echo "Need the library to link"
   end
+end
+
+function clean-projects
+  cd $PROJECT_PATH/sync-worker
+  npm run realclean && npm i
+  cd $PROJECT_PATH/console
+  npm run clean && npm run setup
+  cd $PROJECT_PATH/connectors
+  npm run realclean && npm i
 end
 
 function robo3t
@@ -166,6 +175,7 @@ set dateNow (date +%s)
 if test $dateCredentials -lt $dateNow
   read -l -P 'Do you have your phone? [y/N] ' response
   if string match -q -r '^([yY][eE][sS]|[yY])+$' "$response"
+    ssh-add ~/.ssh/unito_prod
     exec $PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt
   else
     echo "You'll have to regenerate later"

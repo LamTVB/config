@@ -333,9 +333,10 @@ if !exists('g:vscode')
   nmap <Leader>t :Denite file/rec -split=float -winrow=1<CR>
   nnoremap <Leader>g :<C-u>Denite grep:. -no-empty <CR>
   nnoremap <Leader>j :<C-u>DeniteCursorWord grep:. <CR>
-  nmap <Leader>v :VimuxPromptCommand<CR>
+  nmap <Leader>v :%s/<C-R>///gc<left><left><left>
   nmap <Leader>q :CtrlSF<CR>
-  nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>bbbbbbbli
+  nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>F(a
+  nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
   nmap <Leader><PageUp> gt
   nmap <Leader><PageDown> gT
   vmap <Leader>f <Plug>CtrlSFVwordExec
@@ -380,7 +381,7 @@ if !exists('g:vscode')
 
   " === vim-jsdoc shortcuts ==="
   " Generate jsdoc for function under cursor
-  nmap <leader>z :JsDoc<CR>
+  " nmap <leader>z :JsDoc<CR>
 
   " Delete current visual selection and dump in black hole buffer before pasting
   " Used when you want to paste over something without it getting copied to
