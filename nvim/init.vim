@@ -9,6 +9,9 @@ if !exists('g:vscode')
   " Remap leader key to ,
   let mapleader=','
 
+  " This will copy the visual selection to the clipboard on Ctrl-C.
+  map <C-c> "+y
+
   " Enable line numbers
   set number
 
@@ -61,7 +64,6 @@ if !exists('g:vscode')
   " ============================================================================ "
 
   " Wrap in try/catch to avoid errors on initial install before plugin is available
-  try
   " === Denite setup ==="
   " Use ripgrep for searching current directory for files
   " By default, ripgrep will respect rules in .gitignore
@@ -81,6 +83,8 @@ if !exists('g:vscode')
   "   --S:        Search case insensitively if the pattern is all lowercase
   call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
 
+  call denite#custom#source('grep', 'args', ['', '', '!'])
+
   " Recommended defaults for ripgrep via Denite docs
   call denite#custom#var('grep', 'recursive_opts', [])
   call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
@@ -89,6 +93,25 @@ if !exists('g:vscode')
 
   " Remove date from buffer list
   call denite#custom#var('buffer', 'date_format', '')
+
+  call denite#custom#option('_', 'statusline', v:false)
+
+  " Define mappings
+  " autocmd FileType denite call s:denite_my_settings()
+  function! s:denite_my_settings() abort
+    nnoremap <silent><buffer><expr> <CR>
+          \ denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> d
+          \ denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> p
+          \ denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> q
+          \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> i
+          \ denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> <Space>
+          \ denite#do_map('toggle_select').'j'
+  endfunction
 
   " Custom options for Denite
   "   auto_resize             - Auto resize the Denite window height automatically.
@@ -100,8 +123,9 @@ if !exists('g:vscode')
   "   highlight_matched_char  - Matched characters highlight
   "   highlight_matched_range - matched range highlight
   let s:denite_options = {'default' : {
-  \ 'split': 'float',
+  \ 'split': 'floating',
   \ 'auto_resize': 1,
+  \ 'start_filter': 1,
   \ 'prompt': 'λ:',
   \ 'direction': 'rightbelow',
   \ 'winminheight': '10',
@@ -109,7 +133,9 @@ if !exists('g:vscode')
   \ 'highlight_mode_normal': 'Visual',
   \ 'prompt_highlight': 'Function',
   \ 'highlight_matched_char': 'Function',
-  \ 'highlight_matched_range': 'Normal'
+  \ 'highlight_matched_range': 'Normal',
+  \ 'winrow': 1,
+  \ 'vertical_preview': 1,
   \ }}
 
   " Loop through denite options and enable them
@@ -122,9 +148,6 @@ if !exists('g:vscode')
   endfunction
 
   call s:profile(s:denite_options)
-  catch
-    echo 'Denite not installed. It should work after running :PlugInstall'
-  endtry
 
   " === Coc.nvim === "
   " use <tab> for trigger completion and navigate to next complete item
@@ -137,6 +160,7 @@ if !exists('g:vscode')
         \ pumvisible() ? "\<C-n>" :
         \ <SID>check_back_space() ? "\<TAB>" :
         \ coc#refresh()
+
 
   "Close preview window when completion is done.
   autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
@@ -192,9 +216,9 @@ if !exists('g:vscode')
   " Enable true color support
   set termguicolors
 
-  " Editor theme
-  set background=dark
   colorscheme focuspoint
+
+  let g:one_allow_italics = 1
 
   " Add custom highlights in method that is executed every time a
   " colorscheme is sourced
@@ -211,6 +235,28 @@ if !exists('g:vscode')
     autocmd ColorScheme * call MyHighlights()
   augroup END
 
+  function DarkBackground()
+    colorscheme focuspoint
+    autocmd ColorScheme * call MyHighlights()
+    " coc.nvim color changes
+    hi! link CocErrorSign WarningMsg
+    hi! link CocWarningSign Number
+    hi! link CocInfoSign Type
+
+    " Make background transparent for many things
+    hi! Normal ctermbg=NONE guibg=NONE
+    hi! NonText ctermbg=NONE guibg=NONE
+    hi! LineNr ctermfg=NONE guibg=NONE
+    hi! SignColumn ctermfg=NONE guibg=NONE
+    hi! StatusLine guifg=#16252b guibg=#6699CC
+    hi! StatusLineNC guifg=#16252b guibg=#16252b
+  endfunction
+
+  com DarkBackground call DarkBackground()
+  com LightBackground colorscheme one | set background=light | let g:airline_theme='one'
+
+  call DarkBackground()
+
   " Change vertical split character to be a space (essentially hide it)
   set fillchars+=vert:.
 
@@ -220,18 +266,7 @@ if !exists('g:vscode')
   " Don't dispay mode in command line (airilne already shows it)
   set noshowmode
 
-  " coc.nvim color changes
-  hi! link CocErrorSign WarningMsg
-  hi! link CocWarningSign Number
-  hi! link CocInfoSign Type
-
-  " Make background transparent for many things
-  hi! Normal ctermbg=NONE guibg=NONE
-  hi! NonText ctermbg=NONE guibg=NONE
-  hi! LineNr ctermfg=NONE guibg=NONE
-  hi! SignColumn ctermfg=NONE guibg=NONE
-  hi! StatusLine guifg=#16252b guibg=#6699CC
-  hi! StatusLineNC guifg=#16252b guibg=#16252b
+  set winbl=10
 
   " Try to hide vertical spit and end of buffer symbol
   hi! VertSplit gui=NONE guifg=#17252c guibg=#17252c
@@ -243,6 +278,7 @@ if !exists('g:vscode')
   " Make background color transparent for git changes
   hi! SignifySignAdd guibg=NONE
   hi! SignifySignDelete guibg=NONE
+
   hi! SignifySignChange guibg=NONE
 
   " Highlight git change signs
@@ -271,7 +307,7 @@ if !exists('g:vscode')
   let g:airline_extensions = ['branch', 'hunks', 'coc']
 
   " Update section z to just have line number
-  let g:airline_section_z = airline#section#create(['linenr'])
+  " let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr'])
 
   " Do not draw separators for empty sections (only for the active window) >
   let g:airline_skip_empty_sections = 1
@@ -329,16 +365,17 @@ if !exists('g:vscode')
   "   <leader>g - Search current directory for occurences of given term and
   "   close window if no results
   "   <leader>j - Search current directory for occurences of word under cursor
-  nmap ; :Denite buffer -split=float -winrow=1<CR>
-  nmap <Leader>t :Denite file/rec -split=float -winrow=1<CR>
-  nnoremap <Leader>g :<C-u>Denite grep:. -no-empty <CR>
-  nnoremap <Leader>j :<C-u>DeniteCursorWord grep:. <CR>
+  nmap ; :Denite buffer -split=floating -winrow=1<CR>
+  nmap <Leader>t :Denite file/rec -split=floating -winrow=1<CR>
+  nnoremap <Leader>g :<C-u>Denite grep:. -split=floating -no-empty <CR>
+  " nmap ; :Telescope buffers<CR>
+  " nmap <Leader>t :Telescope find_files<CR>
+  " nmap <Leader>k :Telescope live_grep<CR>
+  nnoremap <Leader>j :<C-u>DeniteCursorWord -split=floating grep:. <CR>
   nmap <Leader>v :%s/<C-R>///gc<left><left><left>
   nmap <Leader>q :CtrlSF<CR>
   nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>F(a
   nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
-  nmap <Leader><PageUp> gt
-  nmap <Leader><PageDown> gT
   vmap <Leader>f <Plug>CtrlSFVwordExec
   nmap <Leader>k <Plug>CtrlSFPrompt
   " === Nerdtree shorcuts === "
@@ -358,9 +395,24 @@ if !exists('g:vscode')
   noremap - <PageUp>
 
   " === coc.nvim === "
-  nmap <silent> <leader>dd <Plug>(coc-definition)
-  nmap <silent> <leader>dr <Plug>(coc-references)
-  nmap <silent> <leader>dj <Plug>(coc-implementation)
+  function! s:GoToDefinition()
+    if CocAction('jumpDefinition')
+      return v:true
+    endif
+
+    let ret = execute("silent! normal \<C-]>")
+    if ret =~ "Error"
+      call searchdecl(expand('<cword>'))
+    endif
+  endfunction
+
+  " nmap <silent> <leader>dd :call <SID>GoToDefinition()<CR>
+  nmap <silent> <leader>dd :TsuDefinition <CR>
+  nmap <silent> <leader>dr :TsuReferences <CR>
+  nmap <silent> <leader>dj :TsuImplementations <CR>
+  nmap <silent> <leader>DD <Plug>(coc-definition)
+  nmap <silent> <leader>DR <Plug>(coc-references)
+  nmap <silent> <leader>DJ <Plug>(coc-implementation)
 
   " === vim-better-whitespace === "
   "   <leader>y - Automatically remove trailing whitespace
@@ -405,8 +457,77 @@ if !exists('g:vscode')
   " Automatically re-read file if a change was detected outside of vim
   set autoread
 
+  tnoremap <A-w> <C-\><C-n>
+  augroup neovim_terminal
+    autocmd!
+    " Enter Terminal-mode (insert) automatically
+    autocmd TermOpen * startinsert
+    " Disables number lines on terminal buffers
+    autocmd TermOpen * :set nonumber norelativenumber
+  augroup END
+
   " Reload icons after init source
   if exists('g:loaded_webdevicons')
     call webdevicons#refresh()
   endif
+else
+  function! SetCursorLineNrColorInsert(mode)
+      " Insert mode: blue
+      if a:mode == "i"
+          call VSCodeNotify('nvim-theme.insert')
+
+      " Replace mode: red
+      elseif a:mode == "r"
+          call VSCodeNotify('nvim-theme.replace')
+      endif
+  endfunction
+
+
+  function! SetCursorLineNrColorVisual()
+      set updatetime=0
+      call VSCodeNotify('nvim-theme.visual')
+  endfunction
+
+  vnoremap <silent> <expr> <SID>SetCursorLineNrColorVisual SetCursorLineNrColorVisual()
+  nnoremap <silent> <script> v v<SID>SetCursorLineNrColorVisual
+  nnoremap <silent> <script> V V<SID>SetCursorLineNrColorVisual
+  nnoremap <silent> <script> <C-v> <C-v><SID>SetCursorLineNrColorVisual
+
+  function! SetCursorLineNrColorVisual()
+      set updatetime=0
+      call VSCodeNotify('nvim-theme.visual')
+  endfunction
+
+  vnoremap <silent> <expr> <SID>SetCursorLineNrColorVisual SetCursorLineNrColorVisual()
+  nnoremap <silent> <script> v v<SID>SetCursorLineNrColorVisual
+  nnoremap <silent> <script> V V<SID>SetCursorLineNrColorVisual
+  nnoremap <silent> <script> <C-v> <C-v><SID>SetCursorLineNrColorVisual
+
+
+  augroup CursorLineNrColorSwap
+      autocmd!
+      autocmd InsertEnter * call SetCursorLineNrColorInsert(v:insertmode)
+      autocmd InsertLeave * call VSCodeNotify('nvim-theme.normal')
+      autocmd CursorHold * call VSCodeNotify('nvim-theme.normal')
+  augroup END
+
+  " Remap leader key to ,
+  let mapleader=','
+  nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>F(a
+  nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
+  nnoremap <Leader>k <Cmd>call VSCodeNotify('workbench.action.findInFiles', { 'query': expand('<cword>')})<CR>
+  nnoremap <Leader>dd <Cmd>call VSCodeNotify('editor.action.revealDefinition')<CR>
+  nnoremap <Leader>DD <Cmd>call VSCodeNotify('editor.action.peekImplementation')<CR>
+  nnoremap <Leader>\| <Cmd> call VSCodeNotify('workbench.action.splitEditor')<CR>
+  nnoremap <Leader>t <Cmd>call VSCodeNotify('workbench.action.quickOpen')<CR>
+  nnoremap <Leader>dr <Cmd>call VSCodeNotify('editor.action.referenceSearch.trigger')<CR>
+  noremap <Space> <PageDown>
+  noremap - <PageUp>
+  map <C-c> "+y
+
+  " === TAB/Space settings === "
+  " Insert spaces when TAB is pressed.
+  set expandtab
+
 endif
+

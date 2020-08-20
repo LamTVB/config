@@ -1,11 +1,15 @@
 set -g -x PROJECT_PATH /home/lam/Documents/unito
-set -g -x UNITO_GITHUB_PKG_TOKEN
+set -g -x MONGOMS_SYSTEM_BINARY /usr/bin/mongod
+
+# Set keyboard layout with caps as escape
+setxkbmap -variant intl -layout us -option caps:escape
+alias v '/usr/bin/nvim'
 
 for file in $PROJECT_PATH/bin/*
   if test -x $file
     set fileName (basename $file)
     alias $fileName "/.$file"
-    alias "update-$fileName" "nvim $file"
+    alias "update-$fileName" "v $file"
   end
 end
 
@@ -20,6 +24,7 @@ for directory in $PROJECT_PATH/*
   if test -d $directory
     if test (basename $directory) = 'console'
       alias "maestro" "cd $directory/maestro"
+      alias "client" "cd $directory/client"
     end
     alias (basename $directory) "cd $directory"
   end
@@ -35,14 +40,37 @@ function link-lib
   if test (count $argv) -gt 0
     set libName $argv[1]
     if test -e "$PROJECT_PATH/$libName"
-      rm -rf "node_modules/@unito-private/$libName"
-      ln -s "$PROJECT_PATH/$libName" "node_modules/@unito-private/$libName"
+      rm -rf "node_modules/@unitoio/$libName"
+      ln -s "$PROJECT_PATH/$libName" "node_modules/@unitoio/$libName"
     else
       echo "The project $libaName must be pulled before creating a link with it"
     end
   else
     echo "Need the library to link"
   end
+end
+
+function startup
+  if test (count $argv) -gt 0
+    if [ $argv[1] = "link" ];
+      set syncWorkerStartup 'npm run realclean && npm ci & link-lib connectors && npm run start'
+      set maestroStartup 'npm run clean && npm run setup && maestro && link-lib connectors && .. && npm run dev'
+    end
+  else
+    set syncWorkerStartup 'npm run realclean && npm ci && npm run start'
+    set maestroStartup 'npm run clean && npm run setup && npm run dev'
+  end
+  tmux new-session -d -s unito_env
+  tmux split-window -v
+  tmux split-window -h
+  tmux send-keys 'connectors' 'Enter' 'npm run compile:watch' 'Enter'
+  tmux select-pane -t 0
+  tmux send-keys 'sync-worker' 'Enter'
+  tmux send-keys "$syncWorkerStartup" 'Enter'
+  tmux select-pane -t 1
+  tmux send-keys 'console' 'Enter'
+  tmux send-keys "$maestroStartup" 'Enter'
+  tmux at
 end
 
 function clean-projects
@@ -102,18 +130,17 @@ alias connectorFn-local 'unitolocal node $PROJECT_PATH/console/maestro/bin/scrip
 alias internal-tools 'cd $PROJECT_PATH/internal-tools'
 alias link-local-libs '$PROJECT_PATH/internal-tools/dev/./local_libs.sh'
 alias bump-connectors '$PROJECT_PATH/internal-tools/dev/./bump-connectors'
-alias daily-async-scrum "nvim /home/lam/Documents/unito/daily-async-scrum/daily-async-scrum(date '+%y%m')"
+alias daily-async-scrum "v /home/lam/Documents/unito/daily-async-scrum/daily-async-scrum(date '+%y%m')"
 alias generate-aws-token '$PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt'
 
 # APP ALIAS
 # alias robo3t '~/Documents/robo3t/bin/./robo3t'
-alias v 'nvim'
 alias ngrok '~/./ngrok/ngrok'
 
 # CONFIG ALIAS
-alias ufishrc 'nvim ~/.config/fish/config.fish'
-alias uplugins 'nvim ~/.config/nvim/plugins.vim'
-alias uinitvim 'nvim ~/.config/nvim/init.vim'
+alias ufishrc 'v ~/.config/fish/config.fish'
+alias uplugins 'v ~/.config/nvim/plugins.vim'
+alias uinitvim 'v ~/.config/nvim/init.vim'
 alias fishrc 'source ~/.config/fish/config.fish'
 alias show-used-ports='sudo lsof -i -P -n | grep LISTEN'
 alias redis-server '~/./redis-stable/src/redis-server'
@@ -166,6 +193,7 @@ alias gup "git pull --rebase"
 alias gco "git checkout"
 alias gcm "git checkout master"
 alias glo 'git log --pretty=format:"%C(bold Yellow)Subject: %s%n%C(bold Yellow)Commit: %H%n%C(red)Author: %an <%ae> %n%C(red)Author Date: %ad%n%Creset%b%n%N"'
+alias gprune='git fetch && git remote prune origin 2>&1 | grep "\[pruned\]" | sed -e "s@.*origin/@@g" | xargs git branch -D 2>&1 | grep -v "error: branch"'
 
 set file (cat ~/.aws/credentials)
 set extracted (string match -r "\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z)" "$file")[1]

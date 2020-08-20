@@ -6,5 +6,8 @@
   "diagnostic.warningSign": "•",
   "diagnostic.infoSign": "•",
   "eslint.options": {"configFile": ".eslintrc"},
-  "tslint.options": {"configFile": "tslint.json"}
+  "tslint.options": {
+    "configFile": "tslint.json"
+  },
+  "git.enableGutters": false
 }
