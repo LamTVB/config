@@ -88,7 +88,9 @@ Plug 'mhartington/oceanic-next'
 
 " Customized vim status line
 Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline-themes'
+" Theme one for airline
+Plug 'rakr/vim-one'
 
 " Icons
 Plug 'ryanoasis/vim-devicons'

@@ -1,5 +1,6 @@
 set -g -x PROJECT_PATH /home/lam/Documents/unito
 set -g -x MONGOMS_SYSTEM_BINARY /usr/bin/mongod
+if [ -f ~/.secrets.fish ]; source ~/.secrets.fish; end
 
 # Set keyboard layout with caps as escape
 setxkbmap -variant intl -layout us -option caps:escape

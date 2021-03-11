@@ -83,7 +83,7 @@ if !exists('g:vscode')
   "   --S:        Search case insensitively if the pattern is all lowercase
   call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
 
-  call denite#custom#source('grep', 'args', ['', '', '!'])
+  " call denite#custom#source('grep', 'args', ['', '', '!'])
 
   " Recommended defaults for ripgrep via Denite docs
   call denite#custom#var('grep', 'recursive_opts', [])
@@ -128,7 +128,7 @@ if !exists('g:vscode')
   \ 'start_filter': 1,
   \ 'prompt': 'λ:',
   \ 'direction': 'rightbelow',
-  \ 'winminheight': '10',
+  \ 'winminheight': '20',
   \ 'highlight_mode_insert': 'Visual',
   \ 'highlight_mode_normal': 'Visual',
   \ 'prompt_highlight': 'Function',
