@@ -1,13 +1,9 @@
 {
   "suggest.echodocSupport": true,
   "suggest.maxCompleteItemCount": 20,
-  "eslint.filetypes": ["javascript", "javascriptreact"],
   "diagnostic.errorSign": "•",
   "diagnostic.warningSign": "•",
   "diagnostic.infoSign": "•",
-  "eslint.options": {"configFile": ".eslintrc"},
-  "tslint.options": {
-    "configFile": "tslint.json"
-  },
+  "eslint.options": {"configFile": ".eslintrc.js"},
   "git.enableGutters": false
 }

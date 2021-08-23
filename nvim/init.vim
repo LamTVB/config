@@ -135,6 +135,7 @@ if !exists('g:vscode')
   \ 'highlight_matched_char': 'Function',
   \ 'highlight_matched_range': 'Normal',
   \ 'winrow': 1,
+  \ 'winwidth': 180,
   \ 'vertical_preview': 1,
   \ }}
 
@@ -236,7 +237,10 @@ if !exists('g:vscode')
   augroup END
 
   function DarkBackground()
-    colorscheme focuspoint
+    let g:sonokai_style = 'espresso'
+    let g:sonokai_enable_italic = 1
+
+    colorscheme sonokai
     autocmd ColorScheme * call MyHighlights()
     " coc.nvim color changes
     hi! link CocErrorSign WarningMsg

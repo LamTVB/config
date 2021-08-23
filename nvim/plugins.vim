@@ -21,6 +21,7 @@ Plug 'Lenovsky/nuake'
 Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'Quramy/tsuquyomi'
 Plug 'chase/focuspoint-vim'
+Plug 'sainnhe/sonokai'
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 " === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing

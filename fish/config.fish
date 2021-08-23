@@ -1,5 +1,7 @@
 set -g -x PROJECT_PATH /home/lam/Documents/unito
 set -g -x MONGOMS_SYSTEM_BINARY /usr/bin/mongod
+set -g -x PATH $PATH ~/Documents/bin/idea-IU-211.7628.21/bin/
+set -g -x PATH $PATH ~/Documents/bin/WebStorm-211.7628.25/bin/
 if [ -f ~/.secrets.fish ]; source ~/.secrets.fish; end
 
 # Set keyboard layout with caps as escape
@@ -53,9 +55,12 @@ end
 
 function startup
   if test (count $argv) -gt 0
-    if [ $argv[1] = "link" ];
+    if [ $argv[1] = "no_build" ];
+      set syncWorkerStartup 'npm run start'
+      set maestroStartup 'npm run dev:server'
+    else if [ $argv[1] = "link" ];
       set syncWorkerStartup 'npm run realclean && npm ci & link-lib connectors && npm run start'
-      set maestroStartup 'npm run clean && npm run setup && maestro && link-lib connectors && .. && npm run dev'
+      set maestroStartup 'npm run clean && npm run setup && maestro && link-lib connectors && .. && npm run dev:server'
     end
   else
     set syncWorkerStartup 'npm run realclean && npm ci && npm run start'
@@ -64,7 +69,6 @@ function startup
   tmux new-session -d -s unito_env
   tmux split-window -v
   tmux split-window -h
-  tmux send-keys 'connectors' 'Enter' 'npm run compile:watch' 'Enter'
   tmux select-pane -t 0
   tmux send-keys 'sync-worker' 'Enter'
   tmux send-keys "$syncWorkerStartup" 'Enter'
@@ -106,14 +110,6 @@ function shco
   end
 end
 
-function deploy-to-prod
-  if test (count $argv) -lt 2
-    node $PROJECT_PATH/unito-slack-bot/dist/scripts/deploy_to_production.js
-    return
-  end
-  node $PROJECT_PATH/unito-slack-bot/dist/scripts/deploy_to_production.js $argv[1] $argv[2]
-end
-
 function gp
   if test (current_branch) = master
     cowsay -d 'No push on master'
@@ -126,8 +122,10 @@ alias :q 'exit'
 
 # UNITO ALIAS
 alias connectorFn-prod 'unitoprod node $PROJECT_PATH/console/maestro/bin/script.js scripts/connectorFn.js'
+alias connectorFn-prod-debug 'unitoprod node --inspect-brk $PROJECT_PATH/console/maestro/bin/script.js scripts/connectorFn.js'
 alias connectorFn-staging 'unitostaging node $PROJECT_PATH/console/maestro/bin/script.js scripts/connectorFn.js'
 alias connectorFn-local 'unitolocal node $PROJECT_PATH/console/maestro/bin/script.js scripts/connectorFn.js'
+alias debug-connectorFn-local 'unitolocal node --inspect-brk $PROJECT_PATH/console/maestro/bin/script.js scripts/connectorFn.js'
 alias internal-tools 'cd $PROJECT_PATH/internal-tools'
 alias link-local-libs '$PROJECT_PATH/internal-tools/dev/./local_libs.sh'
 alias bump-connectors '$PROJECT_PATH/internal-tools/dev/./bump-connectors'
