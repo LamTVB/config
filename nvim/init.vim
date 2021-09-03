@@ -1,4 +1,5 @@
 if !exists('g:vscode')
+  set encoding=UTF-8
   scriptencoding utf-8
   source ~/.config/nvim/plugins.vim
 

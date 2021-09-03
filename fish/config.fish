@@ -3,9 +3,13 @@ set -g -x MONGOMS_SYSTEM_BINARY /usr/bin/mongod
 set -g -x PATH $PATH ~/Documents/bin/idea-IU-211.7628.21/bin/
 set -g -x PATH $PATH ~/Documents/bin/WebStorm-211.7628.25/bin/
 if [ -f ~/.secrets.fish ]; source ~/.secrets.fish; end
+set -g -x NVM_DIR "$HOME/.nvm"
+
+starship init fish | source
 
 # Set keyboard layout with caps as escape
 setxkbmap -variant intl -layout us -option caps:escape
+
 alias v '/usr/bin/nvim'
 
 for file in $PROJECT_PATH/bin/*
@@ -89,9 +93,9 @@ end
 
 function robo3t
   if test (count $argv) -gt 0
-    env QT_SCALE_FACTOR=$argv[1] ~/Documents/robo3t/bin/./robo3t
+    env QT_SCALE_FACTOR=$argv[1] ~/Documents/bin/robo3t/bin/./robo3t
   else
-    ~/Documents/robo3t/bin/./robo3t
+    ~/Documents/bin/robo3t/bin/./robo3t
   end
 end
 
