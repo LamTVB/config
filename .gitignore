@@ -1,0 +1,7 @@
+*
+*/
+!.gitignore
+!nvim/init.vim
+!nvim/plugins.vim
+!fish/config.fish
+!install.sh

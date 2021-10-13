@@ -3,6 +3,7 @@
 sudo apt-get install yarn
 sudo apt-get install neovim
 sudo apt-get install curl
+sudo apt-get install ripgrep
 
 mv ~/config/fish/* ~/.config/fish/
 mv ~/config/.git ~/.config

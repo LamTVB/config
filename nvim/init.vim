@@ -160,7 +160,7 @@ if !exists('g:vscode')
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction
 
-  let g:coc_node_path = '/home/lam/.nvm/versions/node/v14.17.6/bin/node'
+  let g:coc_node_path = '~/.local/share/nvm/v14.18.1/bin/node'
 
   inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
