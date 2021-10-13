@@ -84,7 +84,7 @@ if !exists('g:vscode')
   "   --S:        Search case insensitively if the pattern is all lowercase
   call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
 
-  " call denite#custom#source('grep', 'args', ['', '', '!'])
+  call denite#custom#source('grep', 'args', ['', '', '!'])
 
   " Recommended defaults for ripgrep via Denite docs
   call denite#custom#var('grep', 'recursive_opts', [])
@@ -98,7 +98,7 @@ if !exists('g:vscode')
   call denite#custom#option('_', 'statusline', v:false)
 
   " Define mappings
-  " autocmd FileType denite call s:denite_my_settings()
+  autocmd FileType denite call s:denite_my_settings()
   function! s:denite_my_settings() abort
     nnoremap <silent><buffer><expr> <CR>
           \ denite#do_map('do_action')
@@ -107,6 +107,8 @@ if !exists('g:vscode')
     nnoremap <silent><buffer><expr> p
           \ denite#do_map('do_action', 'preview')
     nnoremap <silent><buffer><expr> q
+          \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> <ESC>
           \ denite#do_map('quit')
     nnoremap <silent><buffer><expr> i
           \ denite#do_map('open_filter_buffer')
@@ -157,6 +159,8 @@ if !exists('g:vscode')
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
   endfunction
+
+  let g:coc_node_path = '/home/lam/.nvm/versions/node/v14.17.6/bin/node'
 
   inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :

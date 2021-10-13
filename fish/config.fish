@@ -137,8 +137,6 @@ alias daily-async-scrum "v /home/lam/Documents/unito/daily-async-scrum/daily-asy
 alias generate-aws-token '$PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt'
 
 # APP ALIAS
-# alias robo3t '~/Documents/robo3t/bin/./robo3t'
-alias ngrok '~/./ngrok/ngrok'
 
 # CONFIG ALIAS
 alias ufishrc 'v ~/.config/fish/config.fish'

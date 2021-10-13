@@ -1,15 +1,12 @@
 #/env/bash
 
-sudo apt-get install fish
-
-fish
 sudo apt-get install yarn
-sudo apt-get install git
 sudo apt-get install neovim
+sudo apt-get install curl
 
-mv config/fish/* .config/fish/
-mv config/.git .config
-mv config/nvim/* .config/nvim/
+mv ~/config/fish/* ~/.config/fish/
+mv ~/config/.git ~/.config
+mv ~/config/nvim/* ~/.config/nvim/
 
 rm -rf config
 mkdir -p ~/.local/share/fonts
@@ -35,3 +32,5 @@ git clone git@github.com:unitoio/connectors.git
 git clone git@github.com:unitoio/console.git
 git clone git@github.com:unitoio/internal-tools.git
 git clone git@github.com:unitoio/sync-worker.git
+
+sh -c "$(curl -fsSL https://starship.rs/install.sh)"
