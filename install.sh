@@ -16,9 +16,9 @@ mkdir -p ~/.local/share/fonts
 cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
 mkdir -p ~/Documents/unito/bin
-touch ~/Documents/unito/unitolocal
-touch ~/Documents/unito/unitostaging
-touch ~/Documents/unito/unitoprod
+touch ~/Documents/unito/bin/unitolocal
+touch ~/Documents/unito/bin/unitostaging
+touch ~/Documents/unito/bin/unitoprod
 
 # AWS
 mkdir ~/.aws/
