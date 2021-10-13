@@ -34,4 +34,7 @@ git clone git@github.com:unitoio/console.git
 git clone git@github.com:unitoio/internal-tools.git
 git clone git@github.com:unitoio/sync-worker.git
 
+git config --global user.email "vuanhlam.tranvanba@gmail.com"
+git config --global user.name "Lâm"
+
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
