@@ -27,14 +27,26 @@ sudo apt-get install awscli
 sudo apt-get install jq
 sudo apt-get install perl
 
+# Unito Git repos
 cd ~/Documents/unito/
 
 git clone git@github.com:unitoio/connectors.git
 git clone git@github.com:unitoio/console.git
 git clone git@github.com:unitoio/internal-tools.git
 git clone git@github.com:unitoio/sync-worker.git
+git clone git@github.com:unitoio/connector-sdk.git
 
 git config --global user.email "vuanhlam.tranvanba@gmail.com"
 git config --global user.name "Lâm"
+
+# NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+# OH MY FISH
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+
+# NVM Fish Wrapper
+omf install https://github.com/fabioantunes/fish-nvm
+omf install https://github.com/edc/bass
 
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
