@@ -1,7 +1,7 @@
 set -g -x PROJECT_PATH /home/lam/Documents/unito
 set -g -x MONGOMS_SYSTEM_BINARY /usr/bin/mongod
-set -g -x PATH $PATH ~/Documents/bin/idea-IU-211.7628.21/bin/
-set -g -x PATH $PATH ~/Documents/bin/WebStorm-211.7628.25/bin/
+set -g -x PATH $PATH /home/lam/.local/share/nvm/v14.18.1/bin/
+
 if [ -f ~/.secrets.fish ]; source ~/.secrets.fish; end
 set -g -x NVM_DIR "$HOME/.nvm"
 
@@ -40,7 +40,8 @@ end
 function gpr
   set projectName (git remote get-url origin | sed s/git@github.com:// | sed s/\\.git//)
   set branchName (git rev-parse --abbrev-ref HEAD)
-  google-chrome "https://github.com/$projectName/compare/master...$branchName?expand=1&w=1"
+  set defaultBranch (default_branch)
+  google-chrome "https://github.com/$projectName/compare/$defaultBranch...$branchName?expand=1&w=1"
 end
 
 function link-lib
@@ -99,11 +100,8 @@ function robo3t
   end
 end
 
-function current_branch -d "Output git's current branch name"
-  begin
-    git symbolic-ref HEAD; or \
-    git rev-parse --short HEAD; or return
-  end ^/dev/null | sed -e 's|^refs/heads/||'
+function current_branch
+  git rev-parse --abbrev-ref HEAD
 end
 
 function shco
@@ -115,11 +113,11 @@ function shco
 end
 
 function gp
-  if test (current_branch) = master
-    cowsay -d 'No push on master'
-  else
-    git push $argv
-  end
+  git push $argv
+end
+
+function default_branch
+  git remote show origin | sed -n '/HEAD branch/s/.*: //p'
 end
 
 alias :q 'exit'
@@ -133,6 +131,8 @@ alias debug-connectorFn-local 'unitolocal node --inspect-brk $PROJECT_PATH/conso
 alias internal-tools 'cd $PROJECT_PATH/internal-tools'
 alias link-local-libs '$PROJECT_PATH/internal-tools/dev/./local_libs.sh'
 alias bump-connectors '$PROJECT_PATH/internal-tools/dev/./bump-connectors'
+alias bump-ucommon '$PROJECT_PATH/internal-tools/dev/./bump-ucommon'
+alias bump-connector-sdk '$PROJECT_PATH/internal-tools/dev/./bump-connector-sdk'
 alias daily-async-scrum "v /home/lam/Documents/unito/daily-async-scrum/daily-async-scrum(date '+%y%m')"
 alias generate-aws-token '$PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt'
 
@@ -144,7 +144,6 @@ alias uplugins 'v ~/.config/nvim/plugins.vim'
 alias uinitvim 'v ~/.config/nvim/init.vim'
 alias fishrc 'source ~/.config/fish/config.fish'
 alias show-used-ports='sudo lsof -i -P -n | grep LISTEN'
-alias redis-server '~/./redis-stable/src/redis-server'
 alias cconfig 'cd ~/.config/'
 
 # SYSTEM ALIAS
@@ -173,7 +172,7 @@ alias ggpnp "git pull origin (current_branch) && gp origin (current_branch)"
 alias ggpull "git pull origin (current_branch)"
 alias ggl "git pull origin (current_branch)"
 alias ggpur "git pull --rebase origin (current_branch)"
-alias ggpurm "git pull --rebase origin master"
+alias ggpurm "git pull --rebase origin (default_branch)"
 alias gpsup "gp --set-upstream origin (current_branch)"
 alias ggpush "gp origin (current_branch)"
 alias ggp "gp origin (current_branch)"
@@ -183,7 +182,10 @@ alias grb "git rebase"
 alias grba "git rebase --abort"
 alias grbc "git rebase --continue"
 alias grbs "git rebase --skip"
-alias grbm "git rebase master"
+alias grbm "git rebase (default_branch)"
+alias grbi "git rebase -i"
+alias glrbm "gl --rebase origin (default_branch)"
+alias glrb "gl --rebase"
 alias grhh "git reset HEAD --hard"
 alias grh "git reset HEAD"
 alias gst "git status"
@@ -192,7 +194,7 @@ alias gstaa "git stash apply"
 alias gstp "git stash pop"
 alias gup "git pull --rebase"
 alias gco "git checkout"
-alias gcm "git checkout master"
+alias gcm "git checkout (default_branch)"
 alias glo 'git log --pretty=format:"%C(bold Yellow)Subject: %s%n%C(bold Yellow)Commit: %H%n%C(red)Author: %an <%ae> %n%C(red)Author Date: %ad%n%Creset%b%n%N"'
 alias gprune='git fetch && git remote prune origin 2>&1 | grep "\[pruned\]" | sed -e "s@.*origin/@@g" | xargs git branch -D 2>&1 | grep -v "error: branch"'
 

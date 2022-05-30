@@ -72,7 +72,7 @@ if !exists('g:vscode')
   "   --glob:  Include or exclues files for searching that match the given glob
   "            (aka ignore .git files)
   "
-  call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
+  call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git/*'])
 
   " Use ripgrep in place of "grep"
   call denite#custom#var('grep', 'command', ['rg'])
@@ -115,6 +115,7 @@ if !exists('g:vscode')
     nnoremap <silent><buffer><expr> <Space>
           \ denite#do_map('toggle_select').'j'
   endfunction
+
 
   " Custom options for Denite
   "   auto_resize             - Auto resize the Denite window height automatically.
@@ -363,10 +364,18 @@ if !exists('g:vscode')
     echo 'Airline not installed. It should work after running :PlugInstall'
   endtry
 
+  try
+    let g:ctrlsf_search_mode = 'sync'
+    let g:ctrlsf_mapping = { 'openb': { 'key': 'O', 'suffix': '<C-w>L' } }
+  catch
+    echo 'CtrlSF not installed. It should work after running :PlugInstall'
+  endtry
 
   " ============================================================================ "
   " ===                             KEY MAPPINGS                             === "
   " ============================================================================ "
+
+  xnoremap <expr> p 'pgv"'.v:register.'y`>'
 
   " === Denite shorcuts === "
   "   ;         - Browser currently open buffers
@@ -377,16 +386,15 @@ if !exists('g:vscode')
   nmap ; :Denite buffer -split=floating -winrow=1<CR>
   nmap <Leader>t :Denite file/rec -split=floating -winrow=1<CR>
   nnoremap <Leader>g :<C-u>Denite grep:. -split=floating -no-empty <CR>
-  " nmap ; :Telescope buffers<CR>
-  " nmap <Leader>t :Telescope find_files<CR>
-  " nmap <Leader>k :Telescope live_grep<CR>
-  nnoremap <Leader>j :<C-u>DeniteCursorWord -split=floating grep:. <CR>
+
   nmap <Leader>v :%s/<C-R>///gc<left><left><left>
   nmap <Leader>q :CtrlSF<CR>
   nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>F(a
+  nmap <Leader>C oconsole.log()<Esc>F(a
   nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
   vmap <Leader>f <Plug>CtrlSFVwordExec
   nmap <Leader>k <Plug>CtrlSFPrompt
+
   " === Nerdtree shorcuts === "
   "  <leader>n - Toggle NERDTree on/off
   "  <leader>f - Opens current file location in NERDTree
@@ -397,6 +405,9 @@ if !exists('g:vscode')
   nmap <Leader>\| :<C-u>vsplit<CR>
   noremap <C-_> 0i// <Esc>
   noremap <C-S-/> 0i\/* <Esc> $i*/
+
+  " Git
+  nmap <Leader>gd :Git diff --name-only --diff-filter=U<Esc>
 
   "   <Space> - PageDown
   "   -       - PageUp
@@ -415,8 +426,8 @@ if !exists('g:vscode')
     endif
   endfunction
 
-  " nmap <silent> <leader>dd :call <SID>GoToDefinition()<CR>
-  nmap <silent> <leader>dd :TsuDefinition <CR>
+  nmap <silent> <leader>dd :call <SID>GoToDefinition()<CR>
+  " nmap <silent> <leader>dd :TsuDefinition <CR>
   nmap <silent> <leader>dr :TsuReferences <CR>
   nmap <silent> <leader>dj :TsuImplementations <CR>
   nmap <silent> <leader>DD <Plug>(coc-definition)
@@ -479,64 +490,5 @@ if !exists('g:vscode')
   if exists('g:loaded_webdevicons')
     call webdevicons#refresh()
   endif
-else
-  function! SetCursorLineNrColorInsert(mode)
-      " Insert mode: blue
-      if a:mode == "i"
-          call VSCodeNotify('nvim-theme.insert')
-
-      " Replace mode: red
-      elseif a:mode == "r"
-          call VSCodeNotify('nvim-theme.replace')
-      endif
-  endfunction
-
-
-  function! SetCursorLineNrColorVisual()
-      set updatetime=0
-      call VSCodeNotify('nvim-theme.visual')
-  endfunction
-
-  vnoremap <silent> <expr> <SID>SetCursorLineNrColorVisual SetCursorLineNrColorVisual()
-  nnoremap <silent> <script> v v<SID>SetCursorLineNrColorVisual
-  nnoremap <silent> <script> V V<SID>SetCursorLineNrColorVisual
-  nnoremap <silent> <script> <C-v> <C-v><SID>SetCursorLineNrColorVisual
-
-  function! SetCursorLineNrColorVisual()
-      set updatetime=0
-      call VSCodeNotify('nvim-theme.visual')
-  endfunction
-
-  vnoremap <silent> <expr> <SID>SetCursorLineNrColorVisual SetCursorLineNrColorVisual()
-  nnoremap <silent> <script> v v<SID>SetCursorLineNrColorVisual
-  nnoremap <silent> <script> V V<SID>SetCursorLineNrColorVisual
-  nnoremap <silent> <script> <C-v> <C-v><SID>SetCursorLineNrColorVisual
-
-
-  augroup CursorLineNrColorSwap
-      autocmd!
-      autocmd InsertEnter * call SetCursorLineNrColorInsert(v:insertmode)
-      autocmd InsertLeave * call VSCodeNotify('nvim-theme.normal')
-      autocmd CursorHold * call VSCodeNotify('nvim-theme.normal')
-  augroup END
-
-  " Remap leader key to ,
-  let mapleader=','
-  nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>F(a
-  nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
-  nnoremap <Leader>k <Cmd>call VSCodeNotify('workbench.action.findInFiles', { 'query': expand('<cword>')})<CR>
-  nnoremap <Leader>dd <Cmd>call VSCodeNotify('editor.action.revealDefinition')<CR>
-  nnoremap <Leader>DD <Cmd>call VSCodeNotify('editor.action.peekImplementation')<CR>
-  nnoremap <Leader>\| <Cmd> call VSCodeNotify('workbench.action.splitEditor')<CR>
-  nnoremap <Leader>t <Cmd>call VSCodeNotify('workbench.action.quickOpen')<CR>
-  nnoremap <Leader>dr <Cmd>call VSCodeNotify('editor.action.referenceSearch.trigger')<CR>
-  noremap <Space> <PageDown>
-  noremap - <PageUp>
-  map <C-c> "+y
-
-  " === TAB/Space settings === "
-  " Insert spaces when TAB is pressed.
-  set expandtab
-
 endif
 

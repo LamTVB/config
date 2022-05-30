@@ -1,4 +1,3 @@
-
 " check whether vim-plug is installed and install it if necessary
 let plugpath = expand('<sfile>:p:h'). '/autoload/plug.vim'
 if !filereadable(plugpath)
@@ -26,6 +25,9 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 " === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing
 Plug 'ntpeters/vim-better-whitespace'
+
+" Fzf fuzzy file finder
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 "PEGjs highlighting"
 Plug 'alunny/pegjs-vim'
@@ -95,10 +97,14 @@ Plug 'rakr/vim-one'
 
 " Icons
 Plug 'ryanoasis/vim-devicons'
+
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " CTRL + SHIFT + F
 Plug 'dyng/ctrlsf.vim'
+
+" Rust plugin
+Plug 'rust-lang/rust.vim'
 
 " Initialize plugin system
 call plug#end()
