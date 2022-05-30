@@ -49,4 +49,10 @@ curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install 
 omf install https://github.com/fabioantunes/fish-nvm
 omf install https://github.com/edc/bass
 
+# GNOME
+sudo apt install gnome-session gdm3
+sudo apt-get install chrome-shell-gnome
+sudo apt-get install gnome-shell-extensions
+sudo apt-get install gnome-tweaks
+
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
