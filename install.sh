@@ -26,6 +26,7 @@ touch ~/.aws/config
 sudo apt-get install awscli
 sudo apt-get install jq
 sudo apt-get install perl
+sudo apt-get install tig
 
 # Unito Git repos
 cd ~/Documents/unito/

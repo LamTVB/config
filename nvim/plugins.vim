@@ -15,20 +15,25 @@ if !filereadable(plugpath)
 endif
 
 call plug#begin('~/.config/nvim/plugged')
+" Vim screen started
 Plug 'mhinz/vim-startify'
+" Run a terminal in vim
 Plug 'Lenovsky/nuake'
 Plug 'JamshedVesuna/vim-markdown-preview'
-Plug 'Quramy/tsuquyomi'
+" Currently used theme
 Plug 'chase/focuspoint-vim'
 Plug 'sainnhe/sonokai'
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 " === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing
 Plug 'ntpeters/vim-better-whitespace'
 
-" Fzf fuzzy file finder
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Telescope
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
+" Find and replace
+Plug 'windwp/nvim-spectre'
 "PEGjs highlighting"
 Plug 'alunny/pegjs-vim'
 
@@ -43,13 +48,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Tmux/Neovim movement integration
 Plug 'christoomey/vim-tmux-navigator'
-
-" Denite - Fuzzy finding, buffer management
-Plug 'Shougo/denite.nvim'
-
-" Snippet support
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
 
 " Print function signatures in echo area
 Plug 'Shougo/echodoc.vim'
