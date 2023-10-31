@@ -23,9 +23,22 @@ Plug 'JamshedVesuna/vim-markdown-preview'
 " Currently used theme
 Plug 'chase/focuspoint-vim'
 Plug 'sainnhe/sonokai'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+
 " === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing
 Plug 'ntpeters/vim-better-whitespace'
+
+" Kotlin plugin
+Plug 'udalov/kotlin-vim'
+
+" Vim Bookmarks
+Plug 'MattesGroeger/vim-bookmarks'
+
+" Vim fuzzy search
+Plug 'junegunn/fzf', {'dir': '~/.fzf','do': './install --all'}
+Plug 'junegunn/fzf.vim'
+Plug 'antoinemadec/coc-fzf'
 
 " Telescope
 Plug 'nvim-lua/plenary.nvim'

@@ -74,13 +74,15 @@ endfunction
 let g:coc_node_path = '~/.nvm/versions/node/v16.15.1/bin/node'
 
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <expr><CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 "Close preview window when completion is done.
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+autocmd! CompleteDone * if coc#pum#visible() == 0 | pclose | endif
 
 " === NERDTree === "
 " Show hidden files/directories
@@ -121,7 +123,7 @@ let g:webdevicons_enable_nerdtree = 1
 " Enable true color support
 set termguicolors
 
-colorscheme focuspoint
+" colorscheme focuspoint
 
 let g:one_allow_italics = 1
 
@@ -144,7 +146,8 @@ function DarkBackground()
   let g:sonokai_style = 'espresso'
   let g:sonokai_enable_italic = 1
 
-  colorscheme sonokai
+  " colorscheme focuspoint
+  colorscheme catppuccin-macchiato
   autocmd ColorScheme * call MyHighlights()
   " coc.nvim color changes
   hi! link CocErrorSign WarningMsg
@@ -283,17 +286,16 @@ xnoremap <expr> p 'pgv"'.v:register.'y`>'
 "   close window if no results
 nmap ; :Telescope buffers <CR>
 nmap <Leader>t :Telescope find_files<CR>
-nnoremap <leader>g <cmd>lua require('spectre').open()<CR>
+nnoremap <leader>k <cmd>lua require('spectre').open()<CR>
 nnoremap <leader>G <cmd>lua require('spectre').open_visual({select_word=true})<CR>
-nnoremap <Leader>df :lua require('telescope.builtin').git_status{}<CR>
+nnoremap <Leader>g :lua require('telescope.builtin').git_status{}<CR>
+nnoremap <Leader>df :vert diffs
+nnoremap <Leader>= <C-w>=
 
 nmap <Leader>v :%s/<C-R>///gc<left><left><left>
-nmap <Leader>q :CtrlSF<CR>
 nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>F(a
 nmap <Leader>C oconsole.log()<Esc>F(a
 nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
-vmap <Leader>f <Plug>CtrlSFVwordExec
-nmap <Leader>k <Plug>CtrlSFPrompt
 
 " === Nerdtree shorcuts === "
 "  <leader>n - Toggle NERDTree on/off
@@ -314,6 +316,7 @@ nmap <Leader>gd :Git diff --name-only --diff-filter=U<Esc>
 noremap <Space> <PageDown>
 noremap - <PageUp>
 
+let g:coc_list_split = 'vertical'
 " === coc.nvim === "
 function! s:GoToDefinition()
   if CocAction('jumpDefinition')
