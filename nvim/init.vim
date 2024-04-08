@@ -130,8 +130,6 @@ let g:webdevicons_enable_nerdtree = 1
 " Enable true color support
 set termguicolors
 
-" colorscheme focuspoint
-
 let g:one_allow_italics = 1
 
 " Add custom highlights in method that is executed every time a
@@ -150,11 +148,12 @@ augroup MyColors
 augroup END
 
 function DarkBackground()
+  set background=dark
   let g:sonokai_style = 'espresso'
   let g:sonokai_enable_italic = 1
 
   " colorscheme focuspoint
-  colorscheme catppuccin-macchiato
+  colorscheme kanagawa
   autocmd ColorScheme * call MyHighlights()
   " coc.nvim color changes
   hi! link CocErrorSign WarningMsg
@@ -170,8 +169,13 @@ function DarkBackground()
   hi! StatusLineNC guifg=#16252b guibg=#16252b
 endfunction
 
+function LightBackground()
+  set background=light
+  colorscheme catppuccin
+endfunction
+
 com DarkBackground call DarkBackground()
-com LightBackground colorscheme one | set background=light | let g:airline_theme='one'
+com LightBackground call LightBackground()
 
 call DarkBackground()
 
@@ -225,13 +229,15 @@ try
   let g:airline_extensions = ['branch', 'hunks', 'coc']
 
   " Update section z to just have line number
-  " let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr'])
+  let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr'])
 
   " Do not draw separators for empty sections (only for the active window) >
   let g:airline_skip_empty_sections = 1
 
   " Smartly uniquify buffers names with similar filename, suppressing common parts of paths.
   let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+  let g:airline#extensions#tabline#enabled = 1
 
   " Custom setup that removes filetype/whitespace from default vim airline bar
   let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning', 'error']]
@@ -270,13 +276,6 @@ try
 
 catch
   echo 'Airline not installed. It should work after running :PlugInstall'
-endtry
-
-try
-  let g:ctrlsf_search_mode = 'sync'
-  let g:ctrlsf_mapping = { 'openb': { 'key': 'O', 'suffix': '<C-w>L' } }
-catch
-  echo 'CtrlSF not installed. It should work after running :PlugInstall'
 endtry
 
 " ============================================================================ "
@@ -352,11 +351,15 @@ noremap <C-S-/> 0i\/* <Esc> $i*/
 " Git
 nmap <Leader>gd :Git diff --name-only --diff-filter=U<Esc>
 
+" === Window navigation ===
+
 "   <Space> - PageDown
 "   -       - PageUp
 noremap <Space> <PageDown>
 noremap - <PageUp>
 
+" Resize windows
+nnoremap <Leader>= <C-w>=
 
 " Coc shortcuts
 let g:coc_list_split = 'horizontal'
