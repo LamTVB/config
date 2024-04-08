@@ -140,6 +140,8 @@ alias bump-connector-sdk '$PROJECT_PATH/internal-tools/dev/./bump-connector-sdk'
 alias bump-external-connectors '$PROJECT_PATH/internal-tools/dev/./bump-external-connector'
 alias daily-async-scrum "v /home/lam/Documents/unito/daily-async-scrum/daily-async-scrum(date '+%y%m')"
 alias generate-aws-token '$PROJECT_PATH/internal-tools/dev/./generate-aws-creds.sh lamt'
+alias prod-ips-api-key 'jq -r .apiKey ~/.config/integrationcli/configuration.json | xclip -selection clipboard'
+alias staging-ips-api-key 'jq -r .apiKeyStaging ~/.config/integrationcli/configuration.json | xclip -selection clipboard'
 
 # APP ALIAS
 
@@ -218,6 +220,14 @@ set dateNow (date +%s)
 if test $dateCredentials -lt $dateNow
   echo "Good morning"
   echo "Here's the weather for today"
-  echo "Don't forget to generate your aws credentials"
   meteo
+  generate-aws-token
+  if test $status -eq 0
+    read -l -P 'Do you want to run tmux? [y/N] ' response
+    if string match -q -r '^([yY][eE][sS]|[yY])+$' "$response"
+      exec tmux
+    end
+  else
+    echo "Don't forget to regenerate your aws token"
+  end
 end
