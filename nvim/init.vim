@@ -64,9 +64,14 @@ compiler fish
 " ============================================================================ "
 
 lua require('telescopeSetup')
+lua require('navicSetup')
+lua require('barbecueSetup')
+lua require('spectreSetup')
 lua require('copilotChatSetup')
 lua require('cocSymbolLineSetup')
+
 let b:copilot_enabled = v:true
+
 " === Coc.nvim === "
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
@@ -285,18 +290,39 @@ xnoremap <expr> p 'pgv"'.v:register.'y`>'
 "   <leader>t - Browse list of files in current directory
 "   <leader>g - Search current directory for occurences of given term and
 "   close window if no results
-nmap ; :Telescope buffers <CR>
-nmap <Leader>t :Telescope find_files<CR>
-nnoremap <leader>k <cmd>lua require('spectre').open()<CR>
-nnoremap <leader>G <cmd>lua require('spectre').open_visual({select_word=true})<CR>
-nnoremap <Leader>g :lua require('telescope.builtin').git_status{}<CR>
-nnoremap <Leader>df :vert diffs
-nnoremap <Leader>= <C-w>=
 
+" === Telescope shortcuts === "
+nmap ; :Telescope buffers <CR>
+nmap <Leader>t :Telescope find_files find_command=rg,--ignore,--files prompt_prefix=🔍<CR>
+nnoremap <Leader>g :lua require('telescope.builtin').git_status{}<CR>
+
+
+" === Shortcuts for text editing
+"  Find and replace
 nmap <Leader>v :%s/<C-R>///gc<left><left><left>
-nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n===========`);<Esc>F(a
-nmap <Leader>C oconsole.log()<Esc>F(a
+
+" Macro to add console.dir
 nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
+
+" === Spectre shortcuts === "
+nnoremap <leader>k <cmd>lua require('spectre').open()<CR>
+nnoremap <leader>K <cmd>lua require('spectre').toggle()<CR>
+nnoremap <leader>s <cmd>lua require('spectre').open_visual({select_word=true})<CR>
+nnoremap <leader>sw <cmd>lua require('spectre').open_file_search({select_word=true})<CR>
+
+" === Barbar shortcuts === "
+nnoremap <leader>1 :BufferGoto 1<CR>
+nnoremap <leader>2 :BufferGoto 2<CR>
+nnoremap <leader>3 :BufferGoto 3<CR>
+nnoremap <leader>4 :BufferGoto 4<CR>
+nnoremap <leader>5 :BufferGoto 5<CR>
+nnoremap <leader>N :BufferNext<CR>
+nnoremap <leader>P :BufferPrevious<CR>
+
+nnoremap <leader>q :BufferClose<CR>
+
+" Diff
+nnoremap <Leader>df :vert diffs<CR>
 
 " CopilotChat - Help actions
 nnoremap <leader>H :call CopilotChat_HelpActions()<CR>

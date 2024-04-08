@@ -15,6 +15,7 @@ if !filereadable(plugpath)
 endif
 
 call plug#begin('~/.config/nvim/plugged')
+
 " Vim screen started
 Plug 'mhinz/vim-startify'
 " Run a terminal in vim
@@ -28,6 +29,9 @@ Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 " Copilot
 Plug 'github/copilot.vim'
 Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+
+Plug 'rebelot/kanagawa.nvim'
+
 " === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing
 Plug 'ntpeters/vim-better-whitespace'
@@ -45,8 +49,11 @@ Plug 'antoinemadec/coc-fzf'
 
 " Plenery (used by telescope, CopilotChat)
 Plug 'nvim-lua/plenary.nvim'
+
+" Telescope
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Find and replace
 Plug 'windwp/nvim-spectre'
@@ -110,6 +117,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'rakr/vim-one'
 
 " Icons
+Plug 'nvim-tree/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -119,6 +127,19 @@ Plug 'dyng/ctrlsf.vim'
 
 " Rust plugin
 Plug 'rust-lang/rust.vim'
+
+" Tabs
+Plug 'lewis6991/gitsigns.nvim' " OPTIONAL: for git status
+
+" Barbecue
+Plug 'utilyre/barbecue.nvim'
+
+" nvim navic
+Plug 'SmiteshP/nvim-navic'
+Plug 'neovim/nvim-lspconfig'
+
+" multiline cursor
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 " Initialize plugin system
 call plug#end()
