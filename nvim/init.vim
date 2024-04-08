@@ -64,6 +64,7 @@ compiler fish
 " ============================================================================ "
 
 lua require('telescopeSetup')
+lua require('cocSymbolLineSetup')
 " === Coc.nvim === "
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
@@ -316,7 +317,9 @@ nmap <Leader>gd :Git diff --name-only --diff-filter=U<Esc>
 noremap <Space> <PageDown>
 noremap - <PageUp>
 
-let g:coc_list_split = 'vertical'
+
+" Coc shortcuts
+let g:coc_list_split = 'horizontal'
 " === coc.nvim === "
 function! s:GoToDefinition()
   if CocAction('jumpDefinition')
@@ -332,7 +335,14 @@ endfunction
 nmap <silent> <leader>dd :call <SID>GoToDefinition()<CR>
 nmap <silent> <leader>DD <Plug>(coc-definition)
 nmap <silent> <leader>DR <Plug>(coc-references)
+nmap <silent> <leader>dr :CocCommand tsserver.findAllFileReferences<CR>
 nmap <silent> <leader>DJ <Plug>(coc-implementation)
+nmap <silent> <leader>C :<C-u>CocFzfList diagnostics<CR>
+nmap <silent> <leader>c :<C-u>CocList diagnostics<CR>
+nmap <silent> <leader>CS :<C-u>CocFzfList symbols<CR>
+nmap <silent> <leader>cs :<C-u>CocList symbols<CR>
+nmap <silent> <leader>co :<C-u>CocList outline<CR>
+nmap <silent> <leader>CO :<C-u>CocFzfList outline<CR>
 
 " use <c-space>for trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
