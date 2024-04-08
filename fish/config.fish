@@ -147,7 +147,7 @@ alias staging-ips-api-key 'jq -r .apiKeyStaging ~/.config/integrationcli/configu
 
 # CONFIG ALIAS
 alias ufishrc 'v ~/.config/fish/config.fish'
-alias uplugins 'v ~/.config/nvim/plugins.vim'
+alias upluginsvim 'v ~/.config/nvim/plugins.vim'
 alias uinitvim 'v ~/.config/nvim/init.vim'
 alias fishrc 'source ~/.config/fish/config.fish'
 alias show-used-ports='sudo lsof -i -P -n | grep LISTEN'
@@ -206,6 +206,7 @@ alias gcm "git checkout (default_branch)"
 alias glo 'git log --pretty=format:"%C(bold Yellow)Subject: %s%n%C(bold Yellow)Commit: %H%n%C(red)Author: %an <%ae> %n%C(red)Author Date: %ad%n%Creset%b%n%N"'
 alias gprune 'git fetch && git remote prune origin 2>&1 | grep "\[pruned\]" | sed -e "s@.*origin/@@g" | xargs git branch -D 2>&1 | grep -v "error: branch"'
 alias gprw 'gh pr view --web'
+alias git-filter-repo 'python3 ~/Documents/unito/bin/git-filter-repo'
 
 # KUBECTL alias
 alias k 'kubectl'
