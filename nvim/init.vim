@@ -64,7 +64,9 @@ compiler fish
 " ============================================================================ "
 
 lua require('telescopeSetup')
+lua require('copilotChatSetup')
 lua require('cocSymbolLineSetup')
+let b:copilot_enabled = v:true
 " === Coc.nvim === "
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
@@ -76,8 +78,7 @@ let g:coc_node_path = '~/.nvm/versions/node/v16.15.1/bin/node'
 
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+      \ copilot#Accept("\<TAB>")
 
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <expr><CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
@@ -177,7 +178,6 @@ set splitbelow
 
 " Don't dispay mode in command line (airilne already shows it)
 set noshowmode
-
 
 set winbl=10
 
@@ -298,13 +298,27 @@ nmap <Leader>c oconsole.log(`===========\n${JSON.stringify(, null, 2)}\n========
 nmap <Leader>C oconsole.log()<Esc>F(a
 nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
 
+" CopilotChat - Help actions
+nnoremap <leader>H :call CopilotChat_HelpActions()<CR>
+function! CopilotChat_HelpActions()
+    " Assuming you have a way to execute the equivalent of the below Lua code in Vim
+    lua require("CopilotChat.integrations.telescope").pick(require("CopilotChat.actions").help_actions())
+endfunction
+
+" CopilotChat - Prompt actions
+nnoremap <leader>A :call CopilotChat_PromptActions()<CR>
+function! CopilotChat_PromptActions()
+    " Assuming you have a way to execute the equivalent of the below Lua code in Vim
+    lua require("CopilotChat.integrations.telescope").pick(require("CopilotChat.actions").prompt_actions())
+endfunction
+
 " === Nerdtree shorcuts === "
 "  <leader>n - Toggle NERDTree on/off
 "  <leader>f - Opens current file location in NERDTree
 nmap <Leader>n :NERDTreeToggle<CR>
 nmap <Leader>f :NERDTreeFind<CR>
 
-nmap <Leader>s :<C-u>split<CR>
+nmap <Leader>- :<C-u>split<CR>
 nmap <Leader>\| :<C-u>vsplit<CR>
 noremap <C-_> 0i// <Esc>
 noremap <C-S-/> 0i\/* <Esc> $i*/
