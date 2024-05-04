@@ -360,6 +360,8 @@ noremap - <PageUp>
 
 " Resize windows
 nnoremap <Leader>= <C-w>=
+nnoremap <Leader>> 10<C-w>>
+nnoremap <Leader>< 10<C-w><
 
 " Coc shortcuts
 let g:coc_list_split = 'horizontal'
