@@ -1,10 +1,8 @@
 {
-  "suggest.echodocSupport": true,
   "suggest.maxCompleteItemCount": 20,
   "diagnostic.errorSign": "🔴",
   "diagnostic.warningSign": "⚠️",
   "diagnostic.infoSign": "ℹ️",
-  "eslint.options": {"configFile": ".eslintrc.js"},
   "git.enableGutters": false,
   "coc.preferences.extensionUpdateCheck": "daily"
 }
