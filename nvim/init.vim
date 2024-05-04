@@ -388,6 +388,8 @@ nmap <silent> <leader>CS :<C-u>CocFzfList symbols<CR>
 nmap <silent> <leader>cs :<C-u>CocList symbols<CR>
 nmap <silent> <leader>co :<C-u>CocList outline<CR>
 nmap <silent> <leader>CO :<C-u>CocFzfList outline<CR>
+nmap <silent> <leader>cp <plug>(coc-diagnostic-prev)
+nmap <silent> <leader>cn <plug>(coc-diagnostic-next)
 
 " use <c-space>for trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
