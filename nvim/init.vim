@@ -65,7 +65,6 @@ compiler fish
 
 lua require('telescopeSetup')
 lua require('navicSetup')
-lua require('barbecueSetup')
 lua require('spectreSetup')
 lua require('copilotChatSetup')
 lua require('cocSymbolLineSetup')
@@ -149,10 +148,7 @@ augroup END
 
 function DarkBackground()
   set background=dark
-  let g:sonokai_style = 'espresso'
-  let g:sonokai_enable_italic = 1
 
-  " colorscheme focuspoint
   colorscheme kanagawa
   autocmd ColorScheme * call MyHighlights()
   " coc.nvim color changes
@@ -161,8 +157,6 @@ function DarkBackground()
   hi! link CocInfoSign Type
 
   " Make background transparent for many things
-  hi! Normal ctermbg=NONE guibg=NONE
-  hi! NonText ctermbg=NONE guibg=NONE
   hi! LineNr ctermfg=NONE guibg=NONE
   hi! SignColumn ctermfg=NONE guibg=NONE
   hi! StatusLine guifg=#16252b guibg=#6699CC
@@ -171,7 +165,6 @@ endfunction
 
 function LightBackground()
   set background=light
-  colorscheme catppuccin
 endfunction
 
 com DarkBackground call DarkBackground()

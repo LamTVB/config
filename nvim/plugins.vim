@@ -16,21 +16,13 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
-" Vim screen started
-Plug 'mhinz/vim-startify'
-" Run a terminal in vim
-Plug 'Lenovsky/nuake'
-Plug 'JamshedVesuna/vim-markdown-preview'
 " Currently used theme
-Plug 'chase/focuspoint-vim'
 Plug 'sainnhe/sonokai'
-Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'rebelot/kanagawa.nvim'
 
 " Copilot
 Plug 'github/copilot.vim'
 Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
-
-Plug 'rebelot/kanagawa.nvim'
 
 " === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing
@@ -57,6 +49,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Find and replace
 Plug 'windwp/nvim-spectre'
+
 "PEGjs highlighting"
 Plug 'alunny/pegjs-vim'
 
@@ -101,14 +94,12 @@ Plug 'othree/javascript-libraries-syntax.vim'
 " Improved syntax highlighting and indentation
 Plug 'othree/yajs.vim'
 
+" Fish highlighting
 Plug 'dag/vim-fish'
 
 " === UI === "
 " File explorer
 Plug 'scrooloose/nerdtree'
-
-" Colorscheme
-Plug 'mhartington/oceanic-next'
 
 " Customized vim status line
 Plug 'vim-airline/vim-airline'
@@ -122,17 +113,11 @@ Plug 'ryanoasis/vim-devicons'
 
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-" CTRL + SHIFT + F
-Plug 'dyng/ctrlsf.vim'
-
 " Rust plugin
 Plug 'rust-lang/rust.vim'
 
 " Tabs
 Plug 'lewis6991/gitsigns.nvim' " OPTIONAL: for git status
-
-" Barbecue
-Plug 'utilyre/barbecue.nvim'
 
 " nvim navic
 Plug 'SmiteshP/nvim-navic'
