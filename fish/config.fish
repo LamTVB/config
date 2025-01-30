@@ -34,7 +34,7 @@ function gpr
   set projectName (git remote get-url origin | sed s/git@github.com:// | sed s/\\.git//)
   set branchName (git rev-parse --abbrev-ref HEAD)
   set defaultBranch (default_branch)
-  google-chrome "https://github.com/$projectName/compare/$defaultBranch...$branchName?expand=1&w=1"
+  google-chrome "https://github.com/$projectName/pull/new/$branchName"
 end
 
 function meteo
@@ -57,48 +57,6 @@ function link-lib
     end
   else
     echo "Need the library to link"
-  end
-end
-
-function startup
-  if test (count $argv) -gt 0
-    if [ $argv[1] = "no_build" ];
-      set syncWorkerStartup 'npm run start'
-      set maestroStartup 'npm run dev:server'
-    else if [ $argv[1] = "link" ];
-      set syncWorkerStartup 'npm run realclean && npm ci & link-lib connectors && npm run start'
-      set maestroStartup 'npm run clean && npm run setup && maestro && link-lib connectors && .. && npm run dev:server'
-    end
-  else
-    set syncWorkerStartup 'npm run realclean && npm ci && npm run start'
-    set maestroStartup 'npm run clean && npm run setup && npm run dev'
-  end
-  tmux new-session -d -s unito_env
-  tmux split-window -v
-  tmux split-window -h
-  tmux select-pane -t 0
-  tmux send-keys 'sync-worker' 'Enter'
-  tmux send-keys "$syncWorkerStartup" 'Enter'
-  tmux select-pane -t 1
-  tmux send-keys 'console' 'Enter'
-  tmux send-keys "$maestroStartup" 'Enter'
-  tmux at
-end
-
-function clean-projects
-  cd $PROJECT_PATH/sync-worker
-  npm run realclean && npm i
-  cd $PROJECT_PATH/console
-  npm run clean && npm run setup
-  cd $PROJECT_PATH/connectors
-  npm run realclean && npm i
-end
-
-function robo3t
-  if test (count $argv) -gt 0
-    env QT_SCALE_FACTOR=$argv[1] ~/Documents/bin/robo3t/bin/./robo3t
-  else
-    ~/Documents/bin/robo3t/bin/./robo3t
   end
 end
 
@@ -212,6 +170,7 @@ alias git-filter-repo 'python3 ~/Documents/unito/bin/git-filter-repo'
 alias k 'kubectl'
 alias kn 'kubectl ns'
 alias kc 'kubectl ctx'
+alias ktoken 'kubectl -n kubernetes-dashboard create token admin-user | xclip -selection dashboard'
 
 set file (cat ~/.aws/credentials)
 set extracted (string match -r "\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z)" "$file")[1]
