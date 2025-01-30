@@ -37,7 +37,7 @@ set softtabstop=2
 " Indentation amount for < and > commands.
 set shiftwidth=2
 
-" Don't highlight current cursor line
+" Highlight current cursor line
 set cursorline
 
 " Disable line/column number in status line
@@ -68,6 +68,7 @@ lua require('navicSetup')
 lua require('spectreSetup')
 lua require('copilotChatSetup')
 lua require('cocSymbolLineSetup')
+lua require('catppucinSetup')
 
 let b:copilot_enabled = v:true
 
@@ -148,8 +149,10 @@ augroup END
 
 function DarkBackground()
   set background=dark
+  let g:sonokai_style = 'espresso'
+  let g:sonokai_enable_italic = 1
 
-  colorscheme kanagawa
+  colorscheme catppuccin
   autocmd ColorScheme * call MyHighlights()
   " coc.nvim color changes
   hi! link CocErrorSign WarningMsg
@@ -165,6 +168,7 @@ endfunction
 
 function LightBackground()
   set background=light
+  colorscheme gruvbox-material
 endfunction
 
 com DarkBackground call DarkBackground()
@@ -183,9 +187,19 @@ set noshowmode
 
 set winbl=10
 
-" Try to hide vertical spit and end of buffer symbol
-hi! VertSplit gui=NONE guifg=#17252c guibg=#17252c
-hi! EndOfBuffer ctermbg=NONE ctermfg=NONE guibg=#17252c guifg=#17252c
+hi! link EndOfBuffer Normal
+
+" Hide vertical spit and end of buffer symbol
+" By relying on normal highlight group
+hi! link VertSplit Normal
+hi! link EndOfBuffer Normal
+
+exec 'hi VertSplit gui=NONE' .
+            \' guibg=' . synIDattr(synIDtrans(hlID('Normal')), 'bg', 'gui') .
+            \' guifg=' . synIDattr(synIDtrans(hlID('Normal')), 'bg', 'gui')
+exec 'hi EndOfBuffer gui=NONE' .
+            \' guibg=' . synIDattr(synIDtrans(hlID('Normal')), 'bg', 'gui') .
+            \' guifg=' . synIDattr(synIDtrans(hlID('Normal')), 'bg', 'gui')
 
 " Customize NERDTree directory
 hi! NERDTreeCWD guifg=#99c794
@@ -284,10 +298,10 @@ xnoremap <expr> p 'pgv"'.v:register.'y`>'
 "   close window if no results
 
 " === Telescope shortcuts === "
-nmap ; :Telescope buffers <CR>
-nmap <Leader>t :Telescope find_files find_command=rg,--ignore,--files prompt_prefix=🔍<CR>
+nmap ; :Telescope buffers<CR>
+nmap <Leader>t :Telescope find_files<CR>
 nnoremap <Leader>g :lua require('telescope.builtin').git_status{}<CR>
-
+nnoremap <Leader>T :Telescope<CR>
 
 " === Shortcuts for text editing
 "  Find and replace
@@ -353,8 +367,8 @@ noremap - <PageUp>
 
 " Resize windows
 nnoremap <Leader>= <C-w>=
-nnoremap <Leader>> 10<C-w>>
-nnoremap <Leader>< 10<C-w><
+nnoremap <Leader>> 75<C-w>>
+nnoremap <Leader>< 75<C-w><
 
 " Coc shortcuts
 let g:coc_list_split = 'horizontal'

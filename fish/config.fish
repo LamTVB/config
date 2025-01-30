@@ -30,6 +30,32 @@ for directory in $PROJECT_PATH/*
   end
 end
 
+function switch-nvim
+  if test -e ~/.config/nvim/init.lua
+    echo "Switching to vim-plug"
+    mv ~/.config/nvim/init.lua ~/.config/nvim/wip-init.lua
+    mv ~/.config/nvim/old-init.vim ~/.config/nvim/init.vim
+  else if test -e ~/.config/nvim/init.vim
+    echo "Switching to lazyvim"
+    mv ~/.config/nvim/init.vim ~/.config/nvim/old-init.vim
+    mv ~/.config/nvim/wip-init.lua ~/.config/nvim/init.lua
+  end
+end
+
+function switch-git-user
+  set gitconfig ''
+  head -2 ~/.gitconfig > $gitconfig
+  if contains 'lam@unito.io'
+    echo "Switching to personal git user"
+    mv ~/.gitconfig ~/.gitconfig.unito
+    mv ~/.gitconfig.personal ~/.gitconfig
+  else if contains 'vuanhlam.tranvanba@gmail.com'
+    echo "Switching to work git user"
+    mv ~/.gitconfig ~/.gitconfig.personal
+    mv ~/.gitconfig.unito ~/.gitconfig
+  end
+end
+
 function gpr
   set projectName (git remote get-url origin | sed s/git@github.com:// | sed s/\\.git//)
   set branchName (git rev-parse --abbrev-ref HEAD)
