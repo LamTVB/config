@@ -44,15 +44,16 @@ end
 
 function switch-git-user
   set gitconfig ''
-  head -2 ~/.gitconfig > $gitconfig
-  if contains 'lam@unito.io'
+  if test -e ~/.gitconfig.unito
+    echo "Switching to unito git user"
+    mv ~/.gitconfig ~/.gitconfig.personal
+    mv ~/.gitconfig.unito ~/.gitconfig
+  else if test -e ~/.gitconfig.personal
     echo "Switching to personal git user"
     mv ~/.gitconfig ~/.gitconfig.unito
     mv ~/.gitconfig.personal ~/.gitconfig
-  else if contains 'vuanhlam.tranvanba@gmail.com'
-    echo "Switching to work git user"
-    mv ~/.gitconfig ~/.gitconfig.personal
-    mv ~/.gitconfig.unito ~/.gitconfig
+  else
+    echo "No git user found"
   end
 end
 
