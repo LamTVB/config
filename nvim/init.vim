@@ -15,9 +15,6 @@ map <C-c> "+y
 " Enable line numbers
 set number
 
-" Enable relative numbers
-set relativenumber
-
 " Don't show last command
 set showcmd
 
