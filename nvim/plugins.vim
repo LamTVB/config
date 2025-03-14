@@ -18,11 +18,12 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Currently used theme
 Plug 'sainnhe/sonokai'
-Plug 'rebelot/kanagawa.nvim'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'sainnhe/gruvbox-material'
 
 " Copilot
 Plug 'github/copilot.vim'
-Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'main' }
 
 " === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing
@@ -125,6 +126,10 @@ Plug 'neovim/nvim-lspconfig'
 
 " multiline cursor
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'folke/trouble.nvim', { 'branch': 'main' }
+
+" MongoDB plugin
+Plug 'jrop/mongo.nvim'
 
 " Initialize plugin system
 call plug#end()

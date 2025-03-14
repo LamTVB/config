@@ -30,11 +30,38 @@ for directory in $PROJECT_PATH/*
   end
 end
 
+function switch-nvim
+  if test -e ~/.config/nvim/init.lua
+    echo "Switching to vim-plug"
+    mv ~/.config/nvim/init.lua ~/.config/nvim/wip-init.lua
+    mv ~/.config/nvim/old-init.vim ~/.config/nvim/init.vim
+  else if test -e ~/.config/nvim/init.vim
+    echo "Switching to lazyvim"
+    mv ~/.config/nvim/init.vim ~/.config/nvim/old-init.vim
+    mv ~/.config/nvim/wip-init.lua ~/.config/nvim/init.lua
+  end
+end
+
+function switch-git-user
+  set gitconfig ''
+  if test -e ~/.gitconfig.unito
+    echo "Switching to unito git user"
+    mv ~/.gitconfig ~/.gitconfig.personal
+    mv ~/.gitconfig.unito ~/.gitconfig
+  else if test -e ~/.gitconfig.personal
+    echo "Switching to personal git user"
+    mv ~/.gitconfig ~/.gitconfig.unito
+    mv ~/.gitconfig.personal ~/.gitconfig
+  else
+    echo "No git user found"
+  end
+end
+
 function gpr
   set projectName (git remote get-url origin | sed s/git@github.com:// | sed s/\\.git//)
   set branchName (git rev-parse --abbrev-ref HEAD)
   set defaultBranch (default_branch)
-  google-chrome "https://github.com/$projectName/compare/$defaultBranch...$branchName?expand=1&w=1"
+  google-chrome "https://github.com/$projectName/pull/new/$branchName"
 end
 
 function meteo
@@ -57,48 +84,6 @@ function link-lib
     end
   else
     echo "Need the library to link"
-  end
-end
-
-function startup
-  if test (count $argv) -gt 0
-    if [ $argv[1] = "no_build" ];
-      set syncWorkerStartup 'npm run start'
-      set maestroStartup 'npm run dev:server'
-    else if [ $argv[1] = "link" ];
-      set syncWorkerStartup 'npm run realclean && npm ci & link-lib connectors && npm run start'
-      set maestroStartup 'npm run clean && npm run setup && maestro && link-lib connectors && .. && npm run dev:server'
-    end
-  else
-    set syncWorkerStartup 'npm run realclean && npm ci && npm run start'
-    set maestroStartup 'npm run clean && npm run setup && npm run dev'
-  end
-  tmux new-session -d -s unito_env
-  tmux split-window -v
-  tmux split-window -h
-  tmux select-pane -t 0
-  tmux send-keys 'sync-worker' 'Enter'
-  tmux send-keys "$syncWorkerStartup" 'Enter'
-  tmux select-pane -t 1
-  tmux send-keys 'console' 'Enter'
-  tmux send-keys "$maestroStartup" 'Enter'
-  tmux at
-end
-
-function clean-projects
-  cd $PROJECT_PATH/sync-worker
-  npm run realclean && npm i
-  cd $PROJECT_PATH/console
-  npm run clean && npm run setup
-  cd $PROJECT_PATH/connectors
-  npm run realclean && npm i
-end
-
-function robo3t
-  if test (count $argv) -gt 0
-    env QT_SCALE_FACTOR=$argv[1] ~/Documents/bin/robo3t/bin/./robo3t
-  else
-    ~/Documents/bin/robo3t/bin/./robo3t
   end
 end
 
@@ -212,6 +197,7 @@ alias git-filter-repo 'python3 ~/Documents/unito/bin/git-filter-repo'
 alias k 'kubectl'
 alias kn 'kubectl ns'
 alias kc 'kubectl ctx'
+alias ktoken 'kubectl -n kubernetes-dashboard create token admin-user | xclip -selection dashboard'
 
 set file (cat ~/.aws/credentials)
 set extracted (string match -r "\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z)" "$file")[1]
