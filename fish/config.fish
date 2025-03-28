@@ -2,6 +2,7 @@ set -g -x PROJECT_PATH /home/lam/Documents/unito
 set -g -x MONGOMS_SYSTEM_BINARY /usr/bin/mongod
 set -g -x PATH $PATH /home/lam/.local/share/nvm/v14.18.1/bin/
 set -gx PATH $PATH $HOME/.krew/bin
+set -g -x PATH $PATH /usr/bin/nvim
 
 if [ -f ~/.secrets.fish ]; source ~/.secrets.fish; end
 set -g -x NVM_DIR "$HOME/.nvm"
