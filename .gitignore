@@ -1,8 +1,10 @@
 *
 */
+nvim/plugged/*
+nvim/autoload/*
 !.gitignore
-!nvim/init.vim
-!nvim/plugins.vim
+!nvim/*.vim
+!nvim/*.lua
 !fish/config.fish
 !install.sh
-!nvim/lua/*.lua
+!nvim/lua/*
