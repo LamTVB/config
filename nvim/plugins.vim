@@ -126,6 +126,7 @@ Plug 'neovim/nvim-lspconfig'
 
 " multiline cursor
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
 Plug 'folke/trouble.nvim', { 'branch': 'main' }
 
 " MongoDB plugin

@@ -61,11 +61,11 @@ compiler fish
 " ============================================================================ "
 
 lua require('telescopeSetup')
-lua require('navicSetup')
-lua require('spectreSetup')
-lua require('copilotChatSetup')
-lua require('cocSymbolLineSetup')
-lua require('catppucinSetup')
+" lua require('navicSetup')
+" lua require('spectreSetup')
+" lua require('copilotChatSetup')
+" lua require('cocSymbolLineSetup')
+" lua require('catppucinSetup')
 
 let b:copilot_enabled = v:true
 
@@ -309,9 +309,8 @@ nmap <Leader>z oconsole.dir(, { depth: null });<Esc>F(a
 
 " === Spectre shortcuts === "
 nnoremap <leader>k <cmd>lua require('spectre').open()<CR>
-nnoremap <leader>K <cmd>lua require('spectre').toggle()<CR>
-nnoremap <leader>s <cmd>lua require('spectre').open_visual({select_word=true})<CR>
-nnoremap <leader>sw <cmd>lua require('spectre').open_file_search({select_word=true})<CR>
+nnoremap <leader>s #<cmd>lua require('spectre').open_visual({ select_word=true })<CR>
+nnoremap <leader>sw #<cmd>lua require('spectre').open_file_search({select_word=true})<CR>
 
 " === Barbar shortcuts === "
 nnoremap <leader>1 :BufferGoto 1<CR>
